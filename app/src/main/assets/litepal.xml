@@ -1,0 +1,12 @@
+<litepal>
+
+    <dbname value="Xweather" />
+
+    <version value = "1" />
+
+    <list>
+        <mapping class="com.xweather.android.db.Province"></mapping>
+        <mapping class="com.xweather.android.db.City"></mapping>
+        <mapping class="com.xweather.android.db.County"></mapping>
+    </list>
+</litepal>
