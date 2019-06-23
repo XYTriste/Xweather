@@ -253,11 +253,11 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     private void closeProgressDialog() {
-        ProgressDialogUtil.dismiss();
+       // ProgressDialogUtil.dismiss();
     }
 
     private void showProgressDialog() {
-        ProgressDialogUtil.showProgressDialog(getActivity(),"加载中...");
+       // ProgressDialogUtil.showProgressDialog(getActivity(),"加载中...");
     }
 
 }
