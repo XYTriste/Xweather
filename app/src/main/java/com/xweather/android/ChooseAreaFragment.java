@@ -1,6 +1,8 @@
 package com.xweather.android;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +22,7 @@ import android.widget.Toolbar;
 import com.xweather.android.db.City;
 import com.xweather.android.db.County;
 import com.xweather.android.db.Province;
+import com.xweather.android.gson.Weather;
 import com.xweather.android.util.HttpUtil;
 import com.xweather.android.util.ProgressDialogUtil;
 import com.xweather.android.util.Utility;
@@ -107,6 +110,12 @@ public class ChooseAreaFragment extends Fragment {
                 }else if(currentLevel == LEVEL_CITY){
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }else if(currentLevel == LEVEL_COUNTY){
+                    String weatherId = countyList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -191,7 +200,7 @@ public class ChooseAreaFragment extends Fragment {
     * 根据传入的地址以及数据类型查询省市县数据
      */
     private void queryFromServer(String address,final String type) {
-        showProgressBar();
+        showProgressDialog();
         HttpUtil.sendOkHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -199,7 +208,7 @@ public class ChooseAreaFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        closeProgressBar();
+                        closeProgressDialog();
                         Toast.makeText(getContext(), "加载失败", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -220,7 +229,7 @@ public class ChooseAreaFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            closeProgressBar();
+                            closeProgressDialog();
                             if("province".equals(type)){
                                 queryProvinces();
                             }else if("city".equals(type)){
@@ -235,11 +244,12 @@ public class ChooseAreaFragment extends Fragment {
         });
     }
 
-    private void closeProgressBar() {
+    private void closeProgressDialog() {
         ProgressDialogUtil.dismiss();
     }
 
-    private void showProgressBar() {
-        ProgressDialogUtil.showProgressDialog(getContext(),"正在加载...");
+    private void showProgressDialog() {
+        ProgressDialogUtil.showProgressDialog(getActivity(),"加载中...");
     }
+
 }
